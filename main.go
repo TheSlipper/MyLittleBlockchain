@@ -1,46 +1,34 @@
 package main
 
-import (
-	"fmt"
-	"strconv"
-	"time"
-
-	"github.com/TheSlipper/MyLittleBlockchain/blockchain"
-)
-
-type CommandLine struct {
-	blockchain *blockchain.Block
-}
-
 func main() {
-	start := time.Now()
+	// start := time.Now()
 
-	chain := blockchain.InitBlockChain()
+	// chain := blockchain.InitBlockChain("./tmp/blocks")
 
-	// add some more blocks
-	// chain.AddBlock("A->B;200;CA:BRITISHCOLOMBIA") // A transfers 200 units to B
-	// chain.AddBlock("B->A;50;US:ALASKA")
-	// chain.AddBlock("B->C;330;EU:POLAND")
+	// // add some more blocks
+	// // chain.AddBlock("A->B;200;CA:BRITISHCOLOMBIA") // A transfers 200 units to B
+	// // chain.AddBlock("B->A;50;US:ALASKA")
+	// // chain.AddBlock("B->C;330;EU:POLAND")
 
-	iter := chain.Iterator()
-	block := iter.Next()
-	for {
-		fmt.Printf("\n")
-		fmt.Printf("Previous Hash: %x\n", block.PrevHash)
-		fmt.Printf("Data contained in this Block: %s\n", block.Data)
-		fmt.Printf("Hash: %x\n", block.Hash)
+	// iter := chain.Iterator()
+	// block := iter.Next()
+	// for {
+	// 	fmt.Printf("\n")
+	// 	fmt.Printf("Previous Hash: %x\n", block.PrevHash)
+	// 	fmt.Printf("Data contained in this Block: %s\n", block.Data)
+	// 	fmt.Printf("Hash: %x\n", block.Hash)
 
-		pow := blockchain.NewProof(block)
-		fmt.Printf("PoW: %s\nNonce:%d\n", strconv.FormatBool(pow.Validate()), block.Nonce)
-		fmt.Println()
+	// 	pow := blockchain.NewProof(block)
+	// 	fmt.Printf("PoW: %s\nNonce:%d\n", strconv.FormatBool(pow.Validate()), block.Nonce)
+	// 	fmt.Println()
 
-		if block.PrevHash == nil {
-			break
-		} else {
-			block = iter.Next()
-		}
-	}
+	// 	if block.PrevHash == nil {
+	// 		break
+	// 	} else {
+	// 		block = iter.Next()
+	// 	}
+	// }
 
-	// elapsed := time.Now().Sub(start)
-	fmt.Printf("Time elapsed while calculating hashes and validating them: %v\n", time.Since(start))
+	// // elapsed := time.Now().Sub(start)
+	// fmt.Printf("Time elapsed while calculating hashes and validating them: %v\n", time.Since(start))
 }

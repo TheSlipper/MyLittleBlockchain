@@ -6,9 +6,9 @@ import (
 	"github.com/dgraph-io/badger"
 )
 
-const (
-	dbPath = "./tmp/blocks"
-)
+// const (
+// 	dbPath = "./tmp/blocks"
+// )
 
 // Struct that represents a blockchain structure
 type BlockChain struct {
@@ -24,7 +24,7 @@ func (chain *BlockChain) AddBlock(data string) {
 	err := chain.Database.View(func(txn *badger.Txn) error {
 		item, intErr := txn.Get([]byte("lh"))
 		handleErr(intErr)
-		lastHash, intErr = item.ValueCopy(lastHash)
+		lastHash, intErr = item.ValueCopy(nil)
 
 		return intErr
 	})
@@ -50,8 +50,8 @@ func (chain *BlockChain) Iterator() *BlockChainIterator {
 	return iter
 }
 
-// Initializes a blockchain structure
-func InitBlockChain() *BlockChain {
+// Initializes a blockchain structure and saves it to the given path
+func InitBlockChain(dbPath string) *BlockChain {
 	var lastHash []byte
 
 	opts := badger.DefaultOptions(dbPath)
@@ -65,7 +65,7 @@ func InitBlockChain() *BlockChain {
 		if _, intErr := txn.Get([]byte("lh")); intErr == badger.ErrKeyNotFound {
 			fmt.Println("No existing blockchain found")
 			genesis := Genesis()
-			fmt.Println("Created and proofed genesis block")
+			fmt.Println("Created and proved genesis block")
 
 			intErr = txn.Set(genesis.Hash, genesis.Serialize())
 			intErr = txn.Set([]byte("lh"), genesis.Hash) // only block in database so set it as last hash
@@ -77,7 +77,7 @@ func InitBlockChain() *BlockChain {
 			handleErr(intErr)
 			// lastHash both on left and right side because if capacity of dst isn't sufficient,
 			// a new slice would be allocated and returned (TODO: Check if this won't return nil)
-			lastHash, intErr = item.ValueCopy(lastHash)
+			lastHash, intErr = item.ValueCopy(nil)
 			return intErr
 		}
 	})

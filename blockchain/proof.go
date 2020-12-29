@@ -25,7 +25,7 @@ This PoW implementation has only one requirement: the first few bytes must conta
 // incrementally increase the difficulty over a large period of time. Main reason to do that
 // is to account for the increase of miners on the network and account for increase in
 // computation power of computers in general
-const Difficulty = 20
+const Difficulty = 16
 
 // ProofOfWork contains a proof of work for a given block
 type ProofOfWork struct {
