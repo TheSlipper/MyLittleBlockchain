@@ -8,17 +8,23 @@ import (
 	"github.com/TheSlipper/MyLittleBlockchain/blockchain"
 )
 
+type CommandLine struct {
+	blockchain *blockchain.Block
+}
+
 func main() {
 	start := time.Now()
 
 	chain := blockchain.InitBlockChain()
 
 	// add some more blocks
-	chain.AddBlock("A->B;200;CA:BRITISHCOLOMBIA") // A transfers 200 units to B
-	chain.AddBlock("B->A;50;US:ALASKA")
-	chain.AddBlock("B->C;330;EU:POLAND")
+	// chain.AddBlock("A->B;200;CA:BRITISHCOLOMBIA") // A transfers 200 units to B
+	// chain.AddBlock("B->A;50;US:ALASKA")
+	// chain.AddBlock("B->C;330;EU:POLAND")
 
-	for _, block := range chain.Blocks {
+	iter := chain.Iterator()
+	block := iter.Next()
+	for {
 		fmt.Printf("\n")
 		fmt.Printf("Previous Hash: %x\n", block.PrevHash)
 		fmt.Printf("Data contained in this Block: %s\n", block.Data)
@@ -27,6 +33,12 @@ func main() {
 		pow := blockchain.NewProof(block)
 		fmt.Printf("PoW: %s\nNonce:%d\n", strconv.FormatBool(pow.Validate()), block.Nonce)
 		fmt.Println()
+
+		if block.PrevHash == nil {
+			break
+		} else {
+			block = iter.Next()
+		}
 	}
 
 	// elapsed := time.Now().Sub(start)
