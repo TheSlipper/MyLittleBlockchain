@@ -1,16 +1,9 @@
 package blockchain
 
-// Struct that represents a blockchain structure
-type BlockChain struct {
-	Blocks []*Block
-}
-
-// Member function used for adding a new block to the blockchain
-func (chain *BlockChain) AddBlock(data string) {
-	prevBlock := chain.Blocks[len(chain.Blocks)-1]
-	new := CreateBlock(data, prevBlock.Hash)
-	chain.Blocks = append(chain.Blocks, new)
-}
+import (
+	"bytes"
+	"encoding/gob"
+)
 
 // Block represents a single blockchain block
 type Block struct {
@@ -18,6 +11,28 @@ type Block struct {
 	Data     []byte // Data stored in this block structure
 	PrevHash []byte // Hash of the previous block
 	Nonce    int
+}
+
+// Returns a []byte representation of the block
+func (b *Block) Serialize() []byte {
+	var res bytes.Buffer
+	encoder := gob.NewEncoder(&res)
+
+	err := encoder.Encode(b)
+	handleErr(err)
+
+	return res.Bytes()
+}
+
+// Creates a block from a []byte representation
+func Deserialize(data []byte) *Block {
+	var block Block
+	decoder := gob.NewDecoder(bytes.NewReader(data))
+
+	err := decoder.Decode(&block)
+	handleErr(err)
+
+	return &block
 }
 
 // Creates a block that can be appended to the block with the prevHash
@@ -38,9 +53,4 @@ func CreateBlock(data string, prevHash []byte) *Block {
 // Creates the first block in the blockchain - the genesis block
 func Genesis() *Block {
 	return CreateBlock("Genesis", []byte{})
-}
-
-// Initializes a blockchain structure
-func InitBlockChain() *BlockChain {
-	return &BlockChain{[]*Block{Genesis()}}
 }

@@ -3,9 +3,7 @@ package blockchain
 import (
 	"bytes"
 	"crypto/sha256"
-	"encoding/binary"
 	"fmt"
-	"log"
 	"math"
 	"math/big"
 )
@@ -45,8 +43,8 @@ func (pow *ProofOfWork) InitData(nonce int) []byte {
 		[][]byte{
 			pow.Block.PrevHash,
 			pow.Block.Data,
-			ToHex(int64(nonce)),
-			ToHex(int64(Difficulty)),
+			toHex(int64(nonce)),
+			toHex(int64(Difficulty)),
 		},
 		[]byte{},
 	)
@@ -104,15 +102,4 @@ func NewProof(b *Block) *ProofOfWork {
 
 	pow := &ProofOfWork{b, target}
 	return pow
-}
-
-// Casts a 64 bit integer to an array of bytes
-func ToHex(num int64) []byte {
-	buff := new(bytes.Buffer)
-	err := binary.Write(buff, binary.BigEndian, num)
-	if err != nil {
-		log.Panic(err)
-	}
-
-	return buff.Bytes()
 }
