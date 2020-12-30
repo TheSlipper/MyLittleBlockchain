@@ -66,9 +66,9 @@ func printBlocks(args runtimeArgs) {
 	block := iter.Next()
 	for {
 		fmt.Printf("\n")
-		fmt.Printf("Previous Hash: %x\n", block.PrevHash)
-		fmt.Printf("Data contained in this Block: %s\n", block.Data)
 		fmt.Printf("Hash: %x\n", block.Hash)
+		fmt.Printf("Data contained in this Block: %s\n", block.Data)
+		fmt.Printf("Previous Hash: %x\n", block.PrevHash)
 
 		if block.PrevHash == nil {
 			break
